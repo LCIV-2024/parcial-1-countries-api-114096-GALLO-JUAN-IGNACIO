@@ -91,18 +91,35 @@ class CountryServiceTest {
 
   @Test
   void getCountriesByContinent() {
+    when(restTemplate.getForObject(anyString(), any())).thenReturn(crudeCountries);
+
+    List<CountryDTO> actualCountries = countryService.getCountriesByContinent("Africa");
+    Assertions.assertEquals(actualCountries, List.of());
   }
 
   @Test
   void getCountriesByLanguage() {
+    when(restTemplate.getForObject(anyString(), any())).thenReturn(crudeCountries);
+
+    List<CountryDTO> actualCountries = countryService.getCountriesByContinent("English");
+    Assertions.assertEquals(actualCountries, List.of());
   }
 
   @Test
-  void getCountryWithMostBorders() {
+  void getCountryWithMostBorders() throws JsonProcessingException {
+    when(restTemplate.getForObject(anyString(), any())).thenReturn(crudeCountries);
+
+    List<CountryDTO> actualCountries = countryService.getCountriesByContinent("English");
+    Assertions.assertEquals(List.of(), actualCountries
+    );
   }
 
   @Test
-  void getAllCountriesDTO() {
+  void getAllCountriesDTO() throws JsonProcessingException {
+    when(restTemplate.getForObject(anyString(), any())).thenReturn(crudeCountries);
+
+    List<CountryDTO> actualCountries = countryService.getCountriesByContinent("English");
+    Assertions.assertEquals(objectMapper.writeValueAsString(expectedCountries), objectMapper.writeValueAsString(actualCountries));
   }
 
   @Test
