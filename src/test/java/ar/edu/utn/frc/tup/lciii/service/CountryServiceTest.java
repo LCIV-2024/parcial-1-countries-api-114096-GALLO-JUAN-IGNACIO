@@ -39,7 +39,7 @@ class CountryServiceTest {
 
   @BeforeEach
   void setUp() {
-    crudeCountry.put("common", Map.of("name", Map.of("common", "Argentina")));
+    crudeCountry.put("name", Map.of("common", "Argentinaat"));
     crudeCountry.put("population", 1234);
     crudeCountry.put("area", 1234);
     crudeCountry.put("cca3", "ARG");
