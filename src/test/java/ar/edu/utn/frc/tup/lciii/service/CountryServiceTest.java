@@ -2,6 +2,8 @@ package ar.edu.utn.frc.tup.lciii.service;
 
 import ar.edu.utn.frc.tup.lciii.model.Country;
 import ar.edu.utn.frc.tup.lciii.repository.CountryRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,9 @@ class CountryServiceTest {
   @Autowired
   private CountryService countryService;
 
+  @Autowired
+  private ObjectMapper objectMapper;
+
   @MockBean
   private RestTemplate restTemplate;
 
@@ -39,7 +44,7 @@ class CountryServiceTest {
 
   @BeforeEach
   void setUp() {
-    crudeCountry.put("name", Map.of("common", "Argentinaat"));
+    crudeCountry.put("name", Map.of("common", "Argentina"));
     crudeCountry.put("population", 1234);
     crudeCountry.put("area", 1234);
     crudeCountry.put("cca3", "ARG");
@@ -60,11 +65,11 @@ class CountryServiceTest {
   }
 
   @Test
-  void getAllCountries() {
+  void getAllCountries() throws JsonProcessingException {
     when(restTemplate.getForObject(anyString(), any())).thenReturn(crudeCountries);
 
     List<Country> actualCountries = countryService.getAllCountries();
-//    Assertions.assertEquals(expectedCountries, actualCountries);
+    Assertions.assertEquals(objectMapper.writeValueAsString(expectedCountries), objectMapper.writeValueAsString(actualCountries));
   }
 
   @Test
