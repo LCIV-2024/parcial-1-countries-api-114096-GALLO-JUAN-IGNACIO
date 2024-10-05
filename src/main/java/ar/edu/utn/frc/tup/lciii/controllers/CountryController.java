@@ -1,5 +1,6 @@
 package ar.edu.utn.frc.tup.lciii.controllers;
 import ar.edu.utn.frc.tup.lciii.dtos.CountryDTO;
+import ar.edu.utn.frc.tup.lciii.dtos.SaveCountriesDTO;
 import ar.edu.utn.frc.tup.lciii.service.CountryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,13 @@ public class CountryController {
     @GetMapping("most-borders")
     public ResponseEntity<CountryDTO> getCountryWithMostBorder() {
         return ResponseEntity.ok(countryService.getCountryWithMostBorders());
+    }
+
+    @PostMapping
+    public ResponseEntity<List<CountryDTO>> saveCountries(
+        @RequestBody SaveCountriesDTO saveCountriesDTO
+    ) {
+        return ResponseEntity.ok(countryService.saveCountries(saveCountriesDTO));
     }
 
 }

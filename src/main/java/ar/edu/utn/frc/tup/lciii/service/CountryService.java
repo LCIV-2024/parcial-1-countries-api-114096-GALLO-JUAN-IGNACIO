@@ -1,15 +1,20 @@
 package ar.edu.utn.frc.tup.lciii.service;
 
 import ar.edu.utn.frc.tup.lciii.dtos.CountryDTO;
+import ar.edu.utn.frc.tup.lciii.dtos.SaveCountriesDTO;
+import ar.edu.utn.frc.tup.lciii.entities.CountryEntity;
 import ar.edu.utn.frc.tup.lciii.model.Country;
 import ar.edu.utn.frc.tup.lciii.repository.CountryRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,8 +23,10 @@ public class CountryService {
 
         private final CountryRepository countryRepository;
         private final RestTemplate restTemplate;
+        private final ModelMapper modelMapper;
 
         private List<Country> countryCache;
+        private final Random random = new Random();
 
         public List<Country> getAllCountries() {
                 String url = "https://restcountries.com/v3.1/all";
@@ -148,4 +155,24 @@ public class CountryService {
                 return new CountryDTO(country.getCode(), country.getName());
         }
 
+        public List<CountryDTO> saveCountries(SaveCountriesDTO saveCountriesDTO) {
+                if(saveCountriesDTO.getAmountOfCountryToSave() > 10){
+                        throw new IllegalArgumentException("You can only save 10 countries as a maximum");
+                }
+                List<CountryDTO> savedCountries = new ArrayList<>();
+                if(Objects.isNull(countryCache)) {
+                        countryCache = getAllCountries();
+                }
+                for (int i = 0; i < saveCountriesDTO.getAmountOfCountryToSave(); i++) {
+                        Country toSaveCountry = countryCache.get(random.nextInt(countryCache.size()));
+                        savedCountries.add(mapToDTO(saveCountry(toSaveCountry)));
+                }
+                return savedCountries;
+        }
+
+        private Country saveCountry(Country country) {
+                CountryEntity toSaveCountry = modelMapper.map(country, CountryEntity.class);
+                CountryEntity savedCountry = countryRepository.saveAndFlush(toSaveCountry);
+                return modelMapper.map(savedCountry, Country.class);
+        }
 }
