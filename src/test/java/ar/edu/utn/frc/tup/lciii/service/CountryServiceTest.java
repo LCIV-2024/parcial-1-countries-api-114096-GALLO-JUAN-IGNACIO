@@ -1,5 +1,6 @@
 package ar.edu.utn.frc.tup.lciii.service;
 
+import ar.edu.utn.frc.tup.lciii.dtos.CountryDTO;
 import ar.edu.utn.frc.tup.lciii.model.Country;
 import ar.edu.utn.frc.tup.lciii.repository.CountryRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -74,14 +75,18 @@ class CountryServiceTest {
 
   @Test
   void getCountriesByNameDTO() {
-//    when(restTemplate.getForObject(anyString(), any())).thenReturn(crudeCountries);
-//
-//    List<Country> actualCountries = countryService.getAllCountries();
-//    Assertions.assertEquals(expectedCountries, actualCountries);
+    when(restTemplate.getForObject(anyString(), any())).thenReturn(crudeCountries);
+
+    List<CountryDTO> actualCountries = countryService.getCountriesByNameDTO("China");
+    Assertions.assertEquals(actualCountries, List.of());
   }
 
   @Test
   void getCountriesByCodeDTO() {
+    when(restTemplate.getForObject(anyString(), any())).thenReturn(crudeCountries);
+
+    List<CountryDTO> actualCountries = countryService.getCountriesByCodeDTO("CHI");
+    Assertions.assertEquals(actualCountries, List.of());
   }
 
   @Test
